@@ -10,6 +10,7 @@ import QuestionDetail from './components/QuestionDetail';
 import DepartmentList from './components/DepartmentList';
 import SnomedTags from './components/SnomedTags';
 import TagQuestions from './components/TagQuestions';
+import DigitalTwin from './components/DigitalTwin';
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,7 @@ function App() {
                     <Route path="/departments/:id" element={<DepartmentQuestions />} />
                     <Route path="/tags" element={<SnomedTags />} />
                     <Route path="/tags/:tagId" element={<TagQuestions />} />
+                    <Route path="/digital-twin" element={<DigitalTwin />} />
                   </Routes>
                 </div>
               </main>

@@ -336,8 +336,8 @@ export const mockQuestions: Question[] = [
     department_id: 3,
     department: mockDepartments[2],
     tags: [
-      { id: 13, name: "Hypertension", snomed_concept_id: "38341003", description: "Hypertension" },
-      { id: 14, name: "Blood Pressure", snomed_concept_id: "75367002", description: "Blood pressure" }
+      { id: 13, name: "Hypertension", snomed_concept_id: "38341003", description: "Hypertension", created_at: "2024-03-01T00:00:00Z", updated_at: "2024-03-15T00:00:00Z", severity: 1 },
+      { id: 14, name: "Blood Pressure", snomed_concept_id: "75367002", description: "Blood pressure", created_at: "2024-03-01T00:00:00Z", updated_at: "2024-03-15T00:00:00Z", severity: 1 }
     ],
     created_at: "2024-02-20T00:00:00Z",
     updated_at: "2024-03-12T00:00:00Z"

@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { notifications } from '@mantine/notifications';
-import { Badge, Group, Text, Title, Image, Textarea, Card, Stack, Paper } from '@mantine/core';
+import { Badge, Group, Text, Title, Image, Textarea } from '@mantine/core';
 import { fetchQuestion, updateQuestion, uploadScreenshot } from '../services/api';
 import { Question } from '../types';
 

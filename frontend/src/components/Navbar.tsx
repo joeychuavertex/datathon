@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Group, Button, Text, Burger } from '@mantine/core';
+import { Burger } from '@mantine/core';
 import { useState } from 'react';
 
 const Navbar = () => {

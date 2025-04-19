@@ -61,8 +61,8 @@ const SnowmedTags = () => {
 
   // Create network chart data
   const nodeData: Data = {
+    mode: 'markers+text' as const,
     type: 'scatter',
-    mode: 'markers+text',
     x: nodes.map(node => node.x),
     y: nodes.map(node => node.y),
     text: nodes.map(node => node.name),

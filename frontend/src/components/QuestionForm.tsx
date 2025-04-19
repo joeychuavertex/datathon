@@ -154,9 +154,9 @@ const QuestionForm = () => {
           <button
             type="submit"
             className="btn btn-primary"
-            disabled={createQuestionMutation.isPending}
+            disabled={createQuestionMutation.isLoading}
           >
-            {createQuestionMutation.isPending ? 'Creating...' : 'Create Question'}
+            {createQuestionMutation.isLoading ? 'Creating...' : 'Create Question'}
           </button>
         </div>
       </form>

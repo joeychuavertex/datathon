@@ -83,7 +83,7 @@ const getSuggestedQuestions = (department: Department, existingQuestions: Questi
         name: tag,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
-        severity: 1
+        severity: 1 as number
       }))
     }));
 };

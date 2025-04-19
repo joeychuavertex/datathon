@@ -27,7 +27,7 @@ const DepartmentList = () => {
       <div className="grid gap-6">
         {departments?.map((department) => (
           <Card key={department.id} shadow="sm" padding="lg" radius="md">
-            <Group justify="space-between" mb="xs">
+            <Group position="apart" mb="xs">
               <Title order={2} className="text-xl font-semibold">
                 {department.name}
               </Title>

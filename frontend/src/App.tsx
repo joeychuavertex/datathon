@@ -21,23 +21,35 @@ const DepartmentQuestions = () => {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <MantineProvider>
+      <MantineProvider
+        theme={{
+          breakpoints: {
+            xs: '30em',
+            sm: '48em',
+            md: '64em',
+            lg: '74em',
+            xl: '90em',
+          },
+        }}
+      >
         <Notifications />
         <Router>
           <div className="min-h-screen bg-gray-50">
             <Navbar />
             <Layout>
-              <main className="container mx-auto px-4 py-8">
-                <Routes>
-                  <Route path="/" element={<QuestionList />} />
-                  <Route path="/questions" element={<QuestionList />} />
-                  <Route path="/questions/new" element={<QuestionForm />} />
-                  <Route path="/questions/:id" element={<QuestionDetail />} />
-                  <Route path="/departments" element={<DepartmentList />} />
-                  <Route path="/departments/:id" element={<DepartmentQuestions />} />
-                  <Route path="/tags" element={<SnowmedTags />} />
-                  <Route path="/tags/:tagId" element={<TagQuestions />} />
-                </Routes>
+              <main className="container mx-auto px-4 py-4 md:py-8">
+                <div className="max-w-7xl mx-auto">
+                  <Routes>
+                    <Route path="/" element={<QuestionList />} />
+                    <Route path="/questions" element={<QuestionList />} />
+                    <Route path="/questions/new" element={<QuestionForm />} />
+                    <Route path="/questions/:id" element={<QuestionDetail />} />
+                    <Route path="/departments" element={<DepartmentList />} />
+                    <Route path="/departments/:id" element={<DepartmentQuestions />} />
+                    <Route path="/tags" element={<SnowmedTags />} />
+                    <Route path="/tags/:tagId" element={<TagQuestions />} />
+                  </Routes>
+                </div>
               </main>
             </Layout>
           </div>

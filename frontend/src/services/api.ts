@@ -13,7 +13,7 @@ const api = axios.create({
 // Error handling helper
 const handleApiError = (error: unknown) => {
   if (axios.isAxiosError(error)) {
-    const axiosError = error as AxiosError;
+    const axiosError = error as AxiosError<{ message?: string }>;
     throw new Error(axiosError.response?.data?.message || axiosError.message);
   }
   throw error;

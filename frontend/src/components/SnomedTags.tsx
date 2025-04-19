@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { mockQuestions } from '../mockData/departments';
 import { Tag } from '../types';
 import Plot from 'react-plotly.js';
-import { Data, Layout, ScatterData } from 'plotly.js';
+import { Layout, ScatterData } from 'plotly.js';
 
 interface TagNode {
   id: number;

@@ -1,8 +1,9 @@
-import { useParams, Link } from 'react-router-dom';
 import { Card, Title, Text, Badge, Group, Stack } from '@mantine/core';
-import Plot from 'react-plotly.js';
+import { Link } from 'react-router-dom';
 import { mockQuestions } from '../mockData/departments';
-import { Question, Tag } from '../types';
+import { Tag } from '../types';
+import { fetchQuestions } from '../services/api';
+import Plot from 'react-plotly.js';
 import { Data, Layout } from 'plotly.js';
 import { useQuery } from '@tanstack/react-query';
 import { fetchTagQuestions } from '../services/api';

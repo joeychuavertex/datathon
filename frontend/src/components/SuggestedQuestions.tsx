@@ -79,12 +79,16 @@ const getSuggestedQuestions = (department: Department, existingQuestions: Questi
       department_id: department.id,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
+      slicer_dicer_query: undefined,
+      screenshot_path: undefined,
       tags: suggestion.tags.map((tag, i) => ({
         id: -i - 1,
         name: tag,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
-        severity: 1 as number
+        severity: 1,
+        snomed_concept_id: undefined,
+        description: undefined
       }))
     }));
 };

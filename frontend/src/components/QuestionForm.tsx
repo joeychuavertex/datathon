@@ -50,7 +50,7 @@ const QuestionForm = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === 'department_id' ? parseInt(value) : value,
+      [name]: name === 'department_id' ? Number(value) || 0 : value,
     }));
   };
 

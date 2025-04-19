@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { notifications } from '@mantine/notifications';
-import { Badge, Button, Group, Text, Title, Image, Textarea, Card, Stack, Paper } from '@mantine/core';
+import { Badge, Group, Text, Title, Image, Textarea, Card, Stack, Paper } from '@mantine/core';
 import { fetchQuestion, updateQuestion, uploadScreenshot } from '../services/api';
 import { Question } from '../types';
 
@@ -36,22 +36,31 @@ const QuestionDetail = () => {
 
   const handleScreenshotUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      try {
-        await uploadScreenshot(questionId, file);
-        queryClient.invalidateQueries({ queryKey: ['question', questionId] });
-        notifications.show({
-          title: 'Success',
-          message: 'Screenshot uploaded successfully',
-          color: 'green',
-        });
-      } catch (error) {
-        notifications.show({
-          title: 'Error',
-          message: 'Failed to upload screenshot',
-          color: 'red',
-        });
-      }
+    if (!file) return;
+    
+    if (isNaN(questionId)) {
+      notifications.show({
+        title: 'Error',
+        message: 'Invalid question ID',
+        color: 'red',
+      });
+      return;
+    }
+
+    try {
+      await uploadScreenshot(questionId, file);
+      queryClient.invalidateQueries({ queryKey: ['question', questionId] });
+      notifications.show({
+        title: 'Success',
+        message: 'Screenshot uploaded successfully',
+        color: 'green',
+      });
+    } catch (error) {
+      notifications.show({
+        title: 'Error',
+        message: 'Failed to upload screenshot',
+        color: 'red',
+      });
     }
   };
 

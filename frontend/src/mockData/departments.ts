@@ -1,4 +1,4 @@
-import { Department, Question, Tag } from '../types';
+import { Department, Question } from '../types';
 
 export const mockDepartments: Department[] = [
   {

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { mockQuestions } from '../mockData/departments';
 import { Tag } from '../types';
 import Plot from 'react-plotly.js';
-import { Data, Layout } from 'plotly.js';
+import { Data, Layout, ScatterData } from 'plotly.js';
 
 interface TagNode {
   id: number;
@@ -60,9 +60,9 @@ const SnowmedTags = () => {
   });
 
   // Create network chart data
-  const nodeData: Data = {
+  const nodeData: Partial<ScatterData> = {
     type: 'scatter',
-    mode: 'markers+text' as const,
+    mode: 'text+markers',
     x: nodes.map(node => node.x),
     y: nodes.map(node => node.y),
     text: nodes.map(node => node.name),
@@ -72,22 +72,22 @@ const SnowmedTags = () => {
     }
   };
 
-  const edgeData: Data = {
+  const edgeData: Partial<ScatterData> = {
     type: 'scatter',
     mode: 'lines',
     x: edges.flatMap(edge => {
       const sourceNode = nodes.find(n => n.id === edge.source);
       const targetNode = nodes.find(n => n.id === edge.target);
-      return [sourceNode?.x || 0, targetNode?.x || 0, null];
+      return sourceNode && targetNode ? [sourceNode.x, targetNode.x, null] : [];
     }),
     y: edges.flatMap(edge => {
       const sourceNode = nodes.find(n => n.id === edge.source);
       const targetNode = nodes.find(n => n.id === edge.target);
-      return [sourceNode?.y || 0, targetNode?.y || 0, null];
+      return sourceNode && targetNode ? [sourceNode.y, targetNode.y, null] : [];
     }),
     line: {
       color: 'rgba(128, 128, 128, 0.3)',
-      width: edges.map(edge => Math.max(1, edge.value))
+      width: Math.max(1, edges[0]?.value || 1)
     }
   };
 

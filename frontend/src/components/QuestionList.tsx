@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { Card, Title, Text, Badge, Group, Stack, Paper } from '@mantine/core';
 import Plot from 'react-plotly.js';

@@ -1,6 +1,6 @@
-# Healthcare Analytics Platform
+# Datathon Platform
 
-A web-based platform for healthcare analytics that supports clinical question management and cross-departmental knowledge sharing using Epic's SlicerDicer.
+A web-based platform for datathon that supports clinical question management and cross-departmental knowledge sharing using Epic's SlicerDicer.
 
 ## Features
 

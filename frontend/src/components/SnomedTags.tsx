@@ -19,7 +19,7 @@ interface TagEdge {
   value: number;
 }
 
-const SnowmedTags = () => {
+const SnomedTags = () => {
   // Build tag relationships
   const tagMap = new Map<number, Tag>();
   const tagQuestions = new Map<number, Set<number>>();
@@ -92,7 +92,7 @@ const SnowmedTags = () => {
   };
 
   const layout: Partial<Layout> = {
-    title: 'SNOWMED Tag Network',
+    title: 'SNOMED Tag Network',
     showlegend: false,
     hovermode: 'closest',
     height: 600,
@@ -115,7 +115,7 @@ const SnowmedTags = () => {
     <div className="max-w-6xl mx-auto p-6">
       <div className="mb-6">
         <Title order={1} className="text-2xl font-bold text-gray-800">
-          SNOWMED Tags
+          SNOMED Tags
         </Title>
         <Text size="sm" color="dimmed" mt={2}>
           Explore clinical concepts and their relationships
@@ -129,7 +129,7 @@ const SnowmedTags = () => {
               Tag Network
             </Title>
             <Text size="sm" color="dimmed">
-              Visual representation of how SNOWMED tags are connected through questions
+              Visual representation of how SNOMED tags are connected through questions
             </Text>
             <div className="w-full h-[600px]">
               <Plot
@@ -170,7 +170,7 @@ const SnowmedTags = () => {
                   </Text>
                   {tag.snomed_concept_id && (
                     <Text size="xs" color="dimmed">
-                      SNOWMED ID: {tag.snomed_concept_id}
+                      SNOMED ID: {tag.snomed_concept_id}
                     </Text>
                   )}
                 </Stack>
@@ -183,4 +183,4 @@ const SnowmedTags = () => {
   );
 };
 
-export default SnowmedTags; 
+export default SnomedTags; 

@@ -8,7 +8,7 @@ import QuestionList from './components/QuestionList';
 import QuestionForm from './components/QuestionForm';
 import QuestionDetail from './components/QuestionDetail';
 import DepartmentList from './components/DepartmentList';
-import SnowmedTags from './components/SnomedTags';
+import SnomedTags from './components/SnomedTags';
 import TagQuestions from './components/TagQuestions';
 
 const queryClient = new QueryClient();
@@ -46,7 +46,7 @@ function App() {
                     <Route path="/questions/:id" element={<QuestionDetail />} />
                     <Route path="/departments" element={<DepartmentList />} />
                     <Route path="/departments/:id" element={<DepartmentQuestions />} />
-                    <Route path="/tags" element={<SnowmedTags />} />
+                    <Route path="/tags" element={<SnomedTags />} />
                     <Route path="/tags/:tagId" element={<TagQuestions />} />
                   </Routes>
                 </div>

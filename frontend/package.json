@@ -5,12 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build --emptyOutDir",
-    "vercel-build": "npm run build",
-    "lint": "eslint .",
+    "build": "tsc && vite build",
     "preview": "vite preview",
-    "clean": "rm -rf dist node_modules/.vite",
-    "postinstall": "npm run clean"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",

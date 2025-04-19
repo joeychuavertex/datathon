@@ -5,7 +5,7 @@ A web-based platform for datathon that supports clinical question management and
 ## Features
 
 - Store and search clinical questions and SlicerDicer analyses
-- AI-powered clinical concept tagging using SNOMED CT
+- AI-powered clinical concept tagging using SNOWMED CT
 - Cross-departmental question recommendations
 - Visualization of related clinical questions across departments
 

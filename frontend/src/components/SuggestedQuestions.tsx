@@ -78,6 +78,7 @@ const getSuggestedQuestions = (department: Department, existingQuestions: Questi
       analysis_summary: "This analysis would provide valuable insights into " + suggestion.content.split('.')[0].toLowerCase(),
       department_id: department.id,
       created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
       tags: suggestion.tags.map((tag, i) => ({
         id: -i - 1,
         name: tag,

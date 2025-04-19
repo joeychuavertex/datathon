@@ -61,23 +61,15 @@ const SnowmedTags = () => {
 
   // Create network chart data
   const nodeData: Data = {
-    mode: 'markers+text' as const,
     type: 'scatter',
+    mode: 'markers+text' as const,
     x: nodes.map(node => node.x),
     y: nodes.map(node => node.y),
     text: nodes.map(node => node.name),
-    textposition: 'top center',
     marker: {
       size: nodes.map(node => Math.max(20, node.size * 5)),
-      color: nodes.map(node => `hsl(${node.id * 30 % 360}, 70%, 50%)`),
-      line: {
-        color: 'black',
-        width: 1
-      }
-    },
-    hoverinfo: 'text',
-    hovertext: nodes.map(node => `${node.name}<br>${node.size} questions`),
-    showlegend: false
+      color: nodes.map(node => `hsl(${node.id * 30 % 360}, 70%, 50%)`)
+    }
   };
 
   const edgeData: Data = {
@@ -86,19 +78,17 @@ const SnowmedTags = () => {
     x: edges.flatMap(edge => {
       const sourceNode = nodes.find(n => n.id === edge.source);
       const targetNode = nodes.find(n => n.id === edge.target);
-      return [sourceNode?.x, targetNode?.x, null];
+      return [sourceNode?.x || 0, targetNode?.x || 0, null];
     }),
     y: edges.flatMap(edge => {
       const sourceNode = nodes.find(n => n.id === edge.source);
       const targetNode = nodes.find(n => n.id === edge.target);
-      return [sourceNode?.y, targetNode?.y, null];
+      return [sourceNode?.y || 0, targetNode?.y || 0, null];
     }),
     line: {
       color: 'rgba(128, 128, 128, 0.3)',
       width: edges.map(edge => Math.max(1, edge.value))
-    },
-    hoverinfo: 'skip',
-    showlegend: false
+    }
   };
 
   const layout: Partial<Layout> = {

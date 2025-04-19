@@ -2,8 +2,10 @@ import { useParams, Link } from 'react-router-dom';
 import { Card, Title, Text, Badge, Group, Stack } from '@mantine/core';
 import Plot from 'react-plotly.js';
 import { mockQuestions } from '../mockData/departments';
-import { Question } from '../types';
+import { Question, Tag } from '../types';
 import { Data, Layout } from 'plotly.js';
+import { useQuery } from '@tanstack/react-query';
+import { fetchTagQuestions } from '../services/api';
 
 interface ChartData {
   data: Data[];

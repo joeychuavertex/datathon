@@ -91,6 +91,15 @@ const mockPatients: Patient[] = [
 const generateSimulationResults = (patient: Patient, scenario: string): SimulationResult => {
   const timePoints = Array.from({ length: 12 }, (_, i) => i);
   
+  // Extract percentage change from scenario if present
+  const percentageMatch = scenario.match(/(\d+)%/);
+  const percentageChange = percentageMatch ? parseInt(percentageMatch[1]) / 100 : 0.2; // Default to 20% if not specified
+
+  // Determine which metrics to focus on based on scenario keywords
+  const isGlucoseScenario = scenario.toLowerCase().includes('glucose');
+  const isBloodPressureScenario = scenario.toLowerCase().includes('blood pressure') || scenario.toLowerCase().includes('bp');
+  const isExerciseScenario = scenario.toLowerCase().includes('exercise') || scenario.toLowerCase().includes('activity');
+  
   // Base the simulation on the patient's current conditions and the scenario
   const baseRisk = {
     cardiovascular: patient.conditions.includes('Heart Disease') ? 0.6 : 0.3,
@@ -99,38 +108,54 @@ const generateSimulationResults = (patient: Patient, scenario: string): Simulati
     neurology: 0.2,
   };
 
-  // Simulate changes over time
-  const simulateChanges = (baseValue: number, factor: number) => {
-    return timePoints.map(t => baseValue * (1 + (t * factor)));
+  // Adjust base risks based on scenario
+  if (isGlucoseScenario) {
+    baseRisk.endocrinology *= 1.5;
+    baseRisk.cardiovascular *= 1.2;
+    baseRisk.nephrology *= 1.3;
+  }
+  if (isBloodPressureScenario) {
+    baseRisk.cardiovascular *= 1.4;
+    baseRisk.nephrology *= 1.2;
+  }
+  if (isExerciseScenario) {
+    baseRisk.cardiovascular *= 0.8;
+    baseRisk.endocrinology *= 0.9;
+  }
+
+  // Simulate changes over time with scenario-specific factors
+  const simulateChanges = (baseValue: number, factor: number, isPositive: boolean = false) => {
+    const direction = isPositive ? -1 : 1;
+    return timePoints.map(t => baseValue * (1 + (t * factor * direction * (1 + percentageChange))));
   };
 
   return {
     cardiovascular: {
-      risk: baseRisk.cardiovascular * 1.2,
-      changes: simulateChanges(patient.vitals.bloodPressure, 0.05),
+      risk: baseRisk.cardiovascular * (isGlucoseScenario ? 1.2 : 1),
+      changes: simulateChanges(patient.vitals.bloodPressure, 0.05, isExerciseScenario),
       timePoints,
     },
     nephrology: {
-      risk: baseRisk.nephrology * 1.1,
-      changes: simulateChanges(patient.vitals.kidneyFunction, -0.03),
+      risk: baseRisk.nephrology * (isGlucoseScenario ? 1.1 : 1),
+      changes: simulateChanges(patient.vitals.kidneyFunction, 0.03, isExerciseScenario),
       timePoints,
     },
     endocrinology: {
-      risk: baseRisk.endocrinology * 1.3,
-      changes: simulateChanges(patient.vitals.glucose, 0.08),
+      risk: baseRisk.endocrinology * (isGlucoseScenario ? 1.3 : 1),
+      changes: simulateChanges(patient.vitals.glucose, 0.08, isExerciseScenario),
       timePoints,
     },
     neurology: {
       risk: baseRisk.neurology * 1.1,
-      changes: simulateChanges(1, 0.02),
+      changes: simulateChanges(1, 0.02, isExerciseScenario),
       timePoints,
     },
     recommendations: [
-      "Monitor blood glucose levels closely",
-      "Schedule regular cardiovascular check-ups",
-      "Maintain a balanced diet with controlled carbohydrate intake",
-      "Engage in regular physical activity",
-      "Consider consultation with an endocrinologist",
+      isGlucoseScenario ? "Monitor blood glucose levels closely" : "Schedule regular check-ups",
+      isBloodPressureScenario ? "Monitor blood pressure regularly" : "Maintain regular exercise routine",
+      isExerciseScenario ? "Gradually increase physical activity" : "Maintain a balanced diet",
+      "Schedule follow-up appointment in 2 weeks",
+      isGlucoseScenario ? "Consider consultation with an endocrinologist" : "Consider lifestyle modifications",
     ],
   };
 };

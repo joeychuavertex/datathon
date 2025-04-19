@@ -1,0 +1,50 @@
+import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
+import Navbar from './components/Navbar';
+import Layout from './components/Layout';
+import QuestionList from './components/QuestionList';
+import QuestionForm from './components/QuestionForm';
+import QuestionDetail from './components/QuestionDetail';
+import DepartmentList from './components/DepartmentList';
+import SnowmedTags from './components/SnomedTags';
+import TagQuestions from './components/TagQuestions';
+
+const queryClient = new QueryClient();
+
+const DepartmentQuestions = () => {
+  const { id } = useParams();
+  return <QuestionList departmentId={id ? parseInt(id) : 0} />;
+};
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <MantineProvider>
+        <Notifications />
+        <Router>
+          <div className="min-h-screen bg-gray-50">
+            <Navbar />
+            <Layout>
+              <main className="container mx-auto px-4 py-8">
+                <Routes>
+                  <Route path="/" element={<QuestionList />} />
+                  <Route path="/questions" element={<QuestionList />} />
+                  <Route path="/questions/new" element={<QuestionForm />} />
+                  <Route path="/questions/:id" element={<QuestionDetail />} />
+                  <Route path="/departments" element={<DepartmentList />} />
+                  <Route path="/departments/:id" element={<DepartmentQuestions />} />
+                  <Route path="/tags" element={<SnowmedTags />} />
+                  <Route path="/tags/:tagId" element={<TagQuestions />} />
+                </Routes>
+              </main>
+            </Layout>
+          </div>
+        </Router>
+      </MantineProvider>
+    </QueryClientProvider>
+  );
+}
+
+export default App;

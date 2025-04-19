@@ -1,0 +1,13 @@
+fastapi==0.104.1
+uvicorn==0.24.0
+sqlalchemy==2.0.23
+python-multipart==0.0.6
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+pydantic==2.5.2
+scispacy==0.5.3
+spacy>=3.6.0,<3.7.0
+python-dotenv==1.0.0
+aiofiles==23.2.1
+psycopg2-binary==2.9.9
+en-core-sci-lg @ https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.3/en_core_sci_lg-0.5.3.tar.gz 

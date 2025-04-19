@@ -8,7 +8,9 @@
     "build": "tsc && vite build --emptyOutDir",
     "vercel-build": "npm run build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "clean": "rm -rf dist node_modules/.vite",
+    "postinstall": "npm run clean"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",

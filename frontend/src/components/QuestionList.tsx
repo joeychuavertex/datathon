@@ -513,12 +513,12 @@ const QuestionList = ({ departmentId }: QuestionListProps) => {
                   <Text size="sm" color="dimmed">
                     Created: {new Date(question.created_at).toLocaleDateString()}
                   </Text>
-                  <Link
+                  {/* <Link
                     to={`/questions/${question.id}`}
                     className="text-blue-600 hover:text-blue-800 font-medium"
                   >
                     View Details →
-                  </Link>
+                  </Link> */}
                 </Group>
               </Stack>
             </Card>

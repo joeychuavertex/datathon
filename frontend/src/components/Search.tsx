@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Title, Text, TextInput, Paper, Group, Stack, Card, Badge, Tabs, Loader } from '@mantine/core';
-import { useQuery } from '@tanstack/react-query';
-import { fetchQuestions } from '../services/api';
+import { Container, Title, Text, TextInput, Paper, Group, Stack, Card, Badge, SegmentedControl } from '@mantine/core';
 
 interface SearchResult {
   type: 'question' | 'paper';
@@ -95,13 +93,7 @@ const mockQuestions = [
 
 const Search: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState<string | null>('all');
-
-  // Remove unused query since we're using mock data
-  // const { data: questions, isLoading: isLoadingQuestions } = useQuery({
-  //   queryKey: ['questions'],
-  //   queryFn: fetchQuestions,
-  // });
+  const [activeTab, setActiveTab] = useState<string>('all');
 
   // Mock search function that combines questions and papers
   const performSearch = (query: string): SearchResult[] => {
@@ -172,14 +164,19 @@ const Search: React.FC = () => {
       </Paper>
 
       {searchQuery && (
-        <Tabs value={activeTab} onChange={(value) => setActiveTab(value)}>
-          <Tabs.List>
-            <Tabs.Tab value="all">All Results</Tabs.Tab>
-            <Tabs.Tab value="question">Questions</Tabs.Tab>
-            <Tabs.Tab value="paper">Research Papers</Tabs.Tab>
-          </Tabs.List>
+        <Stack spacing="md">
+          <SegmentedControl
+            value={activeTab}
+            onChange={setActiveTab}
+            data={[
+              { label: 'All Results', value: 'all' },
+              { label: 'Questions', value: 'question' },
+              { label: 'Research Papers', value: 'paper' },
+            ]}
+            fullWidth
+          />
 
-          <Tabs.Panel value="all" pt="md">
+          {activeTab === 'all' && (
             <Stack spacing="md">
               {filteredResults.length > 0 ? (
                 filteredResults.map((result, index) => (
@@ -213,9 +210,9 @@ const Search: React.FC = () => {
                 <Text>No results found</Text>
               )}
             </Stack>
-          </Tabs.Panel>
+          )}
 
-          <Tabs.Panel value="question" pt="md">
+          {activeTab === 'question' && (
             <Stack spacing="md">
               {filteredResults.length > 0 ? (
                 filteredResults.map((result, index) => (
@@ -239,9 +236,9 @@ const Search: React.FC = () => {
                 <Text>No questions found</Text>
               )}
             </Stack>
-          </Tabs.Panel>
+          )}
 
-          <Tabs.Panel value="paper" pt="md">
+          {activeTab === 'paper' && (
             <Stack spacing="md">
               {filteredResults.length > 0 ? (
                 filteredResults.map((result, index) => (
@@ -261,8 +258,8 @@ const Search: React.FC = () => {
                 <Text>No research papers found</Text>
               )}
             </Stack>
-          </Tabs.Panel>
-        </Tabs>
+          )}
+        </Stack>
       )}
     </Container>
   );

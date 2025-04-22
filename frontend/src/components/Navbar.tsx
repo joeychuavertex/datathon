@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Burger } from '@mantine/core';
 import { useState } from 'react';
-import { Group } from '@mantine/core';
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

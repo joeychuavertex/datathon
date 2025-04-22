@@ -97,11 +97,11 @@ const Search: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<string | null>('all');
 
-  // Fetch questions from the API
-  const { data: questions, isLoading: isLoadingQuestions } = useQuery({
-    queryKey: ['questions'],
-    queryFn: fetchQuestions,
-  });
+  // Remove unused query since we're using mock data
+  // const { data: questions, isLoading: isLoadingQuestions } = useQuery({
+  //   queryKey: ['questions'],
+  //   queryFn: fetchQuestions,
+  // });
 
   // Mock search function that combines questions and papers
   const performSearch = (query: string): SearchResult[] => {
@@ -110,7 +110,7 @@ const Search: React.FC = () => {
     const lowerQuery = query.toLowerCase();
     const results: SearchResult[] = [];
 
-    // Search in questions (using mock data for now)
+    // Search in questions (using mock data)
     mockQuestions.forEach(question => {
       const matchesTitle = question.title.toLowerCase().includes(lowerQuery);
       const matchesContent = question.content.toLowerCase().includes(lowerQuery);
@@ -172,7 +172,7 @@ const Search: React.FC = () => {
       </Paper>
 
       {searchQuery && (
-        <Tabs value={activeTab} onChange={setActiveTab}>
+        <Tabs value={activeTab} onChange={(value) => setActiveTab(value)}>
           <Tabs.List>
             <Tabs.Tab value="all">All Results</Tabs.Tab>
             <Tabs.Tab value="question">Questions</Tabs.Tab>
@@ -181,9 +181,7 @@ const Search: React.FC = () => {
 
           <Tabs.Panel value="all" pt="md">
             <Stack spacing="md">
-              {isLoadingQuestions ? (
-                <Loader />
-              ) : filteredResults.length > 0 ? (
+              {filteredResults.length > 0 ? (
                 filteredResults.map((result, index) => (
                   <Card key={index} withBorder>
                     <Group position="apart" mb="xs">
@@ -219,9 +217,7 @@ const Search: React.FC = () => {
 
           <Tabs.Panel value="question" pt="md">
             <Stack spacing="md">
-              {isLoadingQuestions ? (
-                <Loader />
-              ) : filteredResults.length > 0 ? (
+              {filteredResults.length > 0 ? (
                 filteredResults.map((result, index) => (
                   <Card key={index} withBorder>
                     <Text weight={500} mb="xs">{result.title}</Text>

@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { Card, Title, Text, Badge, Group, Stack } from '@mantine/core';
 import { mockQuestions } from '../mockData/departments';
 

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Burger } from '@mantine/core';
 import { useState } from 'react';
+import { Group } from '@mantine/core';
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -34,6 +35,12 @@ const Navbar = () => {
               className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
             >
               Digital Twin
+            </Link>
+            <Link
+              to="/search"
+              className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+            >
+              Search
             </Link>
           </div>
 
@@ -71,6 +78,13 @@ const Navbar = () => {
               onClick={() => setMobileMenuOpen(false)}
             >
               Digital Twin
+            </Link>
+            <Link
+              to="/search"
+              className="block px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Search
             </Link>
           </div>
         </div>

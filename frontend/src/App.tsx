@@ -12,6 +12,7 @@ import SnomedTags from './components/SnomedTags';
 import TagQuestions from './components/TagQuestions';
 import DigitalTwin from './components/DigitalTwin';
 import Search from './components/Search';
+import ProblemConstructor from './components/ProblemConstructor';
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ function App() {
                     <Route path="/tags/:tagId" element={<TagQuestions />} />
                     <Route path="/digital-twin" element={<DigitalTwin />} />
                     <Route path="/search" element={<Search />} />
+                    <Route path="/problem-constructor" element={<ProblemConstructor />} />
                   </Routes>
                 </div>
               </main>

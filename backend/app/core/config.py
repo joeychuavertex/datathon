@@ -26,6 +26,12 @@ class Settings(BaseSettings):
     # AI/NLP Settings
     MIN_SIMILARITY_SCORE: float = 0.5
     MAX_RELATED_QUESTIONS: int = 5
+    
+    # OpenAI Configuration
+    OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
+    OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
+    OPENAI_TEMPERATURE: float = float(os.getenv("OPENAI_TEMPERATURE", "0.7"))
+    OPENAI_MAX_TOKENS: int = int(os.getenv("OPENAI_MAX_TOKENS", "500"))
 
     class Config:
         case_sensitive = True

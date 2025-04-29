@@ -67,28 +67,6 @@ const mockProblems: ProblemStatement[] = [
   }
 ];
 
-const HighlightedText = ({ text }: { text: string }) => {
-  const parts = text.split(/(\[.*?\])/);
-  
-  return (
-    <Text>
-      {parts.map((part, index) => {
-        if (part.startsWith('[') && part.endsWith(']')) {
-          return (
-            <span
-              key={index}
-              className="bg-blue-100 text-blue-800 px-1 py-0.5 rounded font-medium"
-            >
-              {part.slice(1, -1)}
-            </span>
-          );
-        }
-        return part;
-      })}
-    </Text>
-  );
-};
-
 const PastProblems = () => {
   return (
     <div className="max-w-4xl mx-auto p-4">
@@ -125,7 +103,7 @@ const PastProblems = () => {
               ))}
             </Group>
             
-            <HighlightedText text={problem.statement} />
+            <Text>{problem.statement}</Text>
           </Card>
         ))}
       </Stack>

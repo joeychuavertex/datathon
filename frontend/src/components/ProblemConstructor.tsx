@@ -11,6 +11,7 @@ interface ProblemConstructorForm {
   evidence?: string;
   consequences?: string;
   factors?: string;
+  apiKey?: string;
 }
 
 const ProblemConstructor = () => {
@@ -22,6 +23,7 @@ const ProblemConstructor = () => {
     evidence: '',
     consequences: '',
     factors: '',
+    apiKey: '',
   });
   const [result, setResult] = useState<string>('');
   const [loading, setLoading] = useState(false);
@@ -32,18 +34,46 @@ const ProblemConstructor = () => {
     setFormData({ ...formData, [field]: event.target.value });
   };
 
+  const highlightBracketedText = (text: string) => {
+    const parts = text.split(/(\[.*?\])/g);
+    return parts.map((part, index) => {
+      if (part.startsWith('[') && part.endsWith(']')) {
+        return (
+          <span key={index} style={{ backgroundColor: '#E6F3FF', padding: '0 2px', borderRadius: '2px' }}>
+            {part}
+          </span>
+        );
+      }
+      return part;
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setResult('');
 
+    if (!formData.apiKey) {
+      notifications.show({
+        title: 'Error',
+        message: 'Please enter your OpenAI API key',
+        color: 'red',
+      });
+      setLoading(false);
+      return;
+    }
+
     try {
       const openai = new OpenAI({
-        apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+        apiKey: formData.apiKey,
         dangerouslyAllowBrowser: true
       });
 
-      const prompt = `Create a detailed problem statement using the following information:
+      const prompt = `Create a detailed, clinical problem statement using the following information. Follow this exact format and style:
+
+"The [specific patient population with relevant characteristics] at [specific hospital/location with ward/unit details] are experiencing [specific clinical problem or deviation from guidelines/standards] as evidenced by [specific quantitative data, audit results, or measurable observations that demonstrate the problem]. This is contributing to [specific clinical and operational consequences with measurable impacts] and is likely influenced by [specific systemic, process, or knowledge-based factors that contribute to the problem]."
+
+Here is the information to use:
 
 Population/Process: ${formData.population}
 
@@ -57,11 +87,24 @@ Consequences: ${formData.consequences}
 
 Contributing Factors: ${formData.factors}
 
-Format the response as a structured problem statement that clearly identifies each component with line breaks between sections.`;
+Requirements for the generated statement:
+1. Use exact square brackets [] around each key element
+2. Include specific quantitative data and measurements where available
+3. Reference specific guidelines, standards, or protocols when relevant
+4. Use precise clinical terminology
+5. Maintain a formal, academic tone
+6. Ensure each section flows logically into the next
+7. Include specific ward/unit details in the location
+8. Specify exact percentages, rates, or other measurable data in the evidence section
+9. List concrete, specific consequences with measurable impacts
+10. Identify specific, actionable contributing factors
+
+Example of expected output format:
+"The [Adult medical inpatients with identified risk factors for VTE] at [Changi General Hospital, Medical Wards] are experiencing [inconsistent prescription and administration of pharmacological and mechanical VTE prophylaxis as recommended by the MOH Clinical Practice Guidelines on VTE Prevention] as evidenced by [a recent audit showing only 70% of eligible patients receiving appropriate prophylaxis within 24 hours of admission, falling short of the guideline's target of >95%]. This is contributing to [an increased risk of deep vein thrombosis and pulmonary embolism, potentially leading to significant morbidity and mortality, and increased length of stay and healthcare costs] and is likely influenced by [incomplete VTE risk assessments upon admission, lack of standardized order sets within the electronic health record, and insufficient awareness among junior doctors regarding the specific risk stratification and prophylaxis recommendations in the national guidelines]."`;
 
       const completion = await openai.chat.completions.create({
         messages: [{ role: "user", content: prompt }],
-        model: "gpt-3.5-turbo",
+        model: "gpt-4o",
       });
 
       setResult(completion.choices[0].message.content || '');
@@ -97,6 +140,15 @@ Format the response as a structured problem statement that clearly identifies ea
           <Card shadow="sm" padding="lg" radius="md" withBorder>
             <form onSubmit={handleSubmit}>
               <Stack spacing="md">
+                <TextInput
+                  label="OpenAI API Key"
+                  placeholder="Enter your OpenAI API key"
+                  type="password"
+                  value={formData.apiKey}
+                  onChange={handleInputChange('apiKey')}
+                  required
+                />
+                
                 <TextInput
                   label="Population/Process"
                   placeholder="e.g., Patients in the emergency department"
@@ -149,7 +201,7 @@ Format the response as a structured problem statement that clearly identifies ea
           {result && (
             <Card shadow="sm" padding="lg" radius="md" withBorder className="mt-6">
               <Title order={3} className="mb-4">Generated Problem Statement</Title>
-              <Text>{result}</Text>
+              <Text style={{ whiteSpace: 'pre-line' }}>{highlightBracketedText(result)}</Text>
             </Card>
           )}
         </>

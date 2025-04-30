@@ -49,6 +49,58 @@ interface GeneratedContent {
     }>;
     summary: string;
   };
+  interventionsAndProgram: {
+    interventions: Array<{
+      intervention: string;
+      description: string;
+      resources: {
+        staff: string;
+        equipment: string;
+        training: string;
+      };
+      timeline: string;
+      challenges: string;
+      mitigation: string;
+    }>;
+    programStructure: {
+      objectives: string;
+      stakeholders: string;
+      implementationPhases: string;
+      resourceAllocation: string;
+      sustainability: string;
+    };
+    outcomeMeasures: {
+      clinicalOutcome: {
+        measure: string;
+        definition: string;
+        collection: string;
+        frequency: string;
+        target: string;
+        benchmark: string;
+      };
+      processMeasure: {
+        measure: string;
+        definition: string;
+        collection: string;
+        frequency: string;
+        target: string;
+      };
+      balancingMeasure?: {
+        measure: string;
+        definition: string;
+        collection: string;
+        frequency: string;
+        target: string;
+      };
+      patientExperience?: {
+        measure: string;
+        definition: string;
+        collection: string;
+        frequency: string;
+        target: string;
+      };
+    };
+  };
 }
 
 const ProblemConstructor = () => {
@@ -93,7 +145,7 @@ const ProblemConstructor = () => {
         dangerouslyAllowBrowser: true
       });
 
-      const systemPrompt = `You are a healthcare data analyst specializing in Singapore's healthcare system. Analyze the user's input and provide:
+      const systemPrompt = `You are a healthcare data analyst specializing in Singapore's healthcare system. Based on the user's input, you will analyze the components and generate a comprehensive problem statement, data framework, evidence and research analysis, and proposed interventions and improvement program. You should always give a summary of the current state of knowledge even if there are missing components.
 
 1. Analysis of Components:
 First, analyze the user's input and identify which key components are present and which are missing. The required components are:
@@ -117,26 +169,8 @@ For Location/Setting specifically:
 - If only hospital is mentioned: Mark as "missing" and suggest adding ward information
 - If only ward is mentioned: Mark as "missing" and suggest adding hospital information
 - If both are present: Mark as "present" and summarize both elements
-- Example of complete Location/Setting: "Singapore General Hospital, Ward 5A" or "National University Hospital, Emergency Department"
+- Example of complete Location/Setting: "Singapore General Hospital, Orthopedics Department" or "National University Hospital, Emergency Department"
 
-Example component analysis for Location/Setting:
-If input only mentions "Singapore General Hospital":
-{
-  "component": "Location/Setting",
-  "status": "missing",
-  "importance": "Specific ward information is crucial for targeted interventions and resource allocation",
-  "suggestion": "Please specify the ward, department, or unit where the problem occurs",
-  "example": "Singapore General Hospital, Ward 5A"
-}
-
-If input mentions both:
-{
-  "component": "Location/Setting",
-  "status": "present",
-  "importance": "Complete location information enables precise problem identification and solution implementation",
-  "summary": "Singapore General Hospital, Ward 5A",
-  "details": "The problem is specifically occurring in Ward 5A of Singapore General Hospital"
-}
 
 2. Suggested Problem Statement:
 Based on the analysis of components, generate a complete problem statement in this format:
@@ -153,14 +187,22 @@ For example, if the component analysis found:
 The problem statement should be:
 "The elderly patients (≥65 years) with multiple comorbidities at comorbidities department, Singapore General Hospital are experiencing a high incidence of medication errors as evidenced by a 15% error rate in medication administration. This is contributing to an increased average length of stay by 2 days and is likely influenced by complex medication regimens and high staff workload."
 
-Even if there are missing components, the suggested problem statement should still be generated that best fits the initial input and suggested improvements.
+Even if there are missing components, the suggested problem statement should still be generated with the suggested improvements.
 
-3. A comprehensive data framework specifically tailored to Singapore's healthcare context.
+3. A comprehensive data framework specifically tailored to Singapore's healthcare context including the following:
+- Data points e.g., length of stay, readmission rates, complication rates
+- Population e.g., patients above 60 years old who had undergone colon surgery
+- Data sources e.g., electronic health records, hospital admission/discharge databases
+- Collection methods e.g., automated data extraction from electronic health records, manual review of selected cases
+- Frequency e.g., monthly or quarterly review
+- Granularity e.g., individual patient level data
+- Quality assurance e.g., data validation procedures, review of outliers
+- Analysis approach e.g., descriptive analysis, trend analysis, benchmarking against standards or other hospital departments
+
 
 4. Evidence and Research Analysis:
-Provide a comprehensive analysis of the evidence and research that is relevant to the problem statement. Ensure there's always output for this section even if there are missing components.
+Provide evidence and research that is relevant based on the updated suggested problem statement. 
 
-Provide a comprehensive analysis of:
 a) Relevant Evidence:
 - List key studies, guidelines, and best practices
 - Include local and international evidence
@@ -182,6 +224,43 @@ d) Summary:
 - Provide a concise overview of the current state of knowledge
 - Highlight key insights and implications
 - Suggest next steps for evidence-based improvement
+
+Even if there are limited data or components, you should still provide a summary of the current state of knowledge.
+
+5. Proposed Interventions and Improvement Program:
+Suggest a comprehensive improvement program that includes the following even if there are missing components:
+
+a) Potential Interventions:
+- List at least 3specific interventions that could address the problem
+- For each intervention, specify:
+  * Description of the intervention
+  * Required resources (staff, equipment, training)
+  * Implementation timeline
+  * Potential challenges and mitigation strategies
+  * Expected impact on the problem
+
+b) Improvement Program Structure:
+- Outline a structured program that includes:
+  * Program objectives and goals
+  * Key stakeholders and their roles
+  * Implementation phases
+  * Resource allocation plan
+  * Sustainability strategies
+
+c) Outcome Measures:
+- Define appropriate outcome measures for:
+  * Clinical outcomes (e.g., reduction in error rates, improvement in patient outcomes)
+  * Process measures (e.g., adherence to protocols, completion rates)
+  * Balancing measures (e.g., staff workload, resource utilization)
+  * Patient experience measures (e.g., satisfaction scores, feedback)
+- For each measure, specify:
+  * Definition and calculation method
+  * Data collection method
+  * Frequency of measurement
+  * Target values or improvement goals
+  * Benchmarking against local or international standards
+
+Even if there are limited data or components, you should still provide a summary of the current state of knowledge.
 
 
 Format your response as a valid JSON object with the following structure:
@@ -238,6 +317,60 @@ Format your response as a valid JSON object with the following structure:
       }
     ],
     "summary": "string"
+  },
+  "interventionsAndProgram": {
+    "interventions": [
+      {
+        "intervention": "string",
+        "description": "string",
+        "resources": {
+          "staff": "string",
+          "equipment": "string",
+          "training": "string"
+        },
+        "timeline": "string",
+        "challenges": "string",
+        "mitigation": "string"
+      }
+    ],
+    "programStructure": {
+      "objectives": "string",
+      "stakeholders": "string",
+      "implementationPhases": "string",
+      "resourceAllocation": "string",
+      "sustainability": "string"
+    },
+    "outcomeMeasures": {
+      "clinicalOutcome": {
+        "measure": "string",
+        "definition": "string",
+        "collection": "string",
+        "frequency": "string",
+        "target": "string",
+        "benchmark": "string"
+      },
+      "processMeasure": {
+        "measure": "string",
+        "definition": "string",
+        "collection": "string",
+        "frequency": "string",
+        "target": "string"
+      },
+      "balancingMeasure": {
+        "measure": "string",
+        "definition": "string",
+        "collection": "string",
+        "frequency": "string",
+        "target": "string"
+      },
+      "patientExperience": {
+        "measure": "string",
+        "definition": "string",
+        "collection": "string",
+        "frequency": "string",
+        "target": "string"
+      }
+    }
   }
 }
 
@@ -285,6 +418,35 @@ Your response must be a valid JSON object with all the fields shown above. Do no
               qualityImprovementProjects: Array.isArray(parsedResult.evidenceAndResearch?.qualityImprovementProjects) ? parsedResult.evidenceAndResearch.qualityImprovementProjects : [],
               researchGaps: Array.isArray(parsedResult.evidenceAndResearch?.researchGaps) ? parsedResult.evidenceAndResearch.researchGaps : [],
               summary: parsedResult.evidenceAndResearch?.summary || ''
+            },
+            interventionsAndProgram: {
+              interventions: Array.isArray(parsedResult.interventionsAndProgram?.interventions) ? parsedResult.interventionsAndProgram.interventions : [],
+              programStructure: {
+                objectives: parsedResult.interventionsAndProgram?.programStructure?.objectives || '',
+                stakeholders: parsedResult.interventionsAndProgram?.programStructure?.stakeholders || '',
+                implementationPhases: parsedResult.interventionsAndProgram?.programStructure?.implementationPhases || '',
+                resourceAllocation: parsedResult.interventionsAndProgram?.programStructure?.resourceAllocation || '',
+                sustainability: parsedResult.interventionsAndProgram?.programStructure?.sustainability || ''
+              },
+              outcomeMeasures: {
+                clinicalOutcome: {
+                  measure: parsedResult.interventionsAndProgram?.outcomeMeasures?.clinicalOutcome?.measure || '',
+                  definition: parsedResult.interventionsAndProgram?.outcomeMeasures?.clinicalOutcome?.definition || '',
+                  collection: parsedResult.interventionsAndProgram?.outcomeMeasures?.clinicalOutcome?.collection || '',
+                  frequency: parsedResult.interventionsAndProgram?.outcomeMeasures?.clinicalOutcome?.frequency || '',
+                  target: parsedResult.interventionsAndProgram?.outcomeMeasures?.clinicalOutcome?.target || '',
+                  benchmark: parsedResult.interventionsAndProgram?.outcomeMeasures?.clinicalOutcome?.benchmark || ''
+                },
+                processMeasure: {
+                  measure: parsedResult.interventionsAndProgram?.outcomeMeasures?.processMeasure?.measure || '',
+                  definition: parsedResult.interventionsAndProgram?.outcomeMeasures?.processMeasure?.definition || '',
+                  collection: parsedResult.interventionsAndProgram?.outcomeMeasures?.processMeasure?.collection || '',
+                  frequency: parsedResult.interventionsAndProgram?.outcomeMeasures?.processMeasure?.frequency || '',
+                  target: parsedResult.interventionsAndProgram?.outcomeMeasures?.processMeasure?.target || ''
+                },
+                balancingMeasure: parsedResult.interventionsAndProgram?.outcomeMeasures?.balancingMeasure || null,
+                patientExperience: parsedResult.interventionsAndProgram?.outcomeMeasures?.patientExperience || null
+              }
             }
           };
           setResult(initializedResult);
@@ -470,6 +632,107 @@ Your response must be a valid JSON object with all the fields shown above. Do no
                   <div>
                     <Title order={4}>Summary</Title>
                     <Text>{result.evidenceAndResearch.summary}</Text>
+                  </div>
+                </Stack>
+              </Card>
+
+              <Card shadow="sm" padding="lg" radius="md" withBorder className="mt-6">
+                <Title order={3} className="mb-4">Proposed Interventions and Improvement Program</Title>
+                <Stack spacing="md">
+                  <div>
+                    <Title order={4}>Potential Interventions</Title>
+                    {result.interventionsAndProgram.interventions?.map((item, index) => (
+                      <div key={index} className="mb-6">
+                        <Text weight={500} size="lg">{item.intervention}</Text>
+                        <Text size="sm" color="dimmed">{item.description}</Text>
+                        <div className="mt-2">
+                          <Text weight={500}>Resources Required:</Text>
+                          <Text size="sm">Staff: {item.resources.staff}</Text>
+                          <Text size="sm">Equipment: {item.resources.equipment}</Text>
+                          <Text size="sm">Training: {item.resources.training}</Text>
+                        </div>
+                        <div className="mt-2">
+                          <Text weight={500}>Timeline:</Text>
+                          <Text size="sm">{item.timeline}</Text>
+                        </div>
+                        <div className="mt-2">
+                          <Text weight={500}>Potential Challenges:</Text>
+                          <Text size="sm">{item.challenges}</Text>
+                        </div>
+                        <div className="mt-2">
+                          <Text weight={500}>Mitigation Strategies:</Text>
+                          <Text size="sm">{item.mitigation}</Text>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div>
+                    <Title order={4}>Program Structure</Title>
+                    <div className="mb-4">
+                      <Text weight={500}>Objectives and Goals:</Text>
+                      <Text size="sm">{result.interventionsAndProgram.programStructure.objectives}</Text>
+                    </div>
+                    <div className="mb-4">
+                      <Text weight={500}>Key Stakeholders:</Text>
+                      <Text size="sm">{result.interventionsAndProgram.programStructure.stakeholders}</Text>
+                    </div>
+                    <div className="mb-4">
+                      <Text weight={500}>Implementation Phases:</Text>
+                      <Text size="sm">{result.interventionsAndProgram.programStructure.implementationPhases}</Text>
+                    </div>
+                    <div className="mb-4">
+                      <Text weight={500}>Resource Allocation:</Text>
+                      <Text size="sm">{result.interventionsAndProgram.programStructure.resourceAllocation}</Text>
+                    </div>
+                    <div className="mb-4">
+                      <Text weight={500}>Sustainability Strategies:</Text>
+                      <Text size="sm">{result.interventionsAndProgram.programStructure.sustainability}</Text>
+                    </div>
+                  </div>
+
+                  <div>
+                    <Title order={4}>Outcome Measures</Title>
+                    <div className="mb-4">
+                      <Text weight={500}>Clinical Outcome:</Text>
+                      <Text size="sm">Measure: {result.interventionsAndProgram.outcomeMeasures.clinicalOutcome.measure}</Text>
+                      <Text size="sm">Definition: {result.interventionsAndProgram.outcomeMeasures.clinicalOutcome.definition}</Text>
+                      <Text size="sm">Collection Method: {result.interventionsAndProgram.outcomeMeasures.clinicalOutcome.collection}</Text>
+                      <Text size="sm">Frequency: {result.interventionsAndProgram.outcomeMeasures.clinicalOutcome.frequency}</Text>
+                      <Text size="sm">Target: {result.interventionsAndProgram.outcomeMeasures.clinicalOutcome.target}</Text>
+                      <Text size="sm">Benchmark: {result.interventionsAndProgram.outcomeMeasures.clinicalOutcome.benchmark}</Text>
+                    </div>
+
+                    <div className="mb-4">
+                      <Text weight={500}>Process Measure:</Text>
+                      <Text size="sm">Measure: {result.interventionsAndProgram.outcomeMeasures.processMeasure.measure}</Text>
+                      <Text size="sm">Definition: {result.interventionsAndProgram.outcomeMeasures.processMeasure.definition}</Text>
+                      <Text size="sm">Collection Method: {result.interventionsAndProgram.outcomeMeasures.processMeasure.collection}</Text>
+                      <Text size="sm">Frequency: {result.interventionsAndProgram.outcomeMeasures.processMeasure.frequency}</Text>
+                      <Text size="sm">Target: {result.interventionsAndProgram.outcomeMeasures.processMeasure.target}</Text>
+                    </div>
+
+                    {result.interventionsAndProgram.outcomeMeasures.balancingMeasure && (
+                      <div className="mb-4">
+                        <Text weight={500}>Balancing Measure:</Text>
+                        <Text size="sm">Measure: {result.interventionsAndProgram.outcomeMeasures.balancingMeasure.measure}</Text>
+                        <Text size="sm">Definition: {result.interventionsAndProgram.outcomeMeasures.balancingMeasure.definition}</Text>
+                        <Text size="sm">Collection Method: {result.interventionsAndProgram.outcomeMeasures.balancingMeasure.collection}</Text>
+                        <Text size="sm">Frequency: {result.interventionsAndProgram.outcomeMeasures.balancingMeasure.frequency}</Text>
+                        <Text size="sm">Target: {result.interventionsAndProgram.outcomeMeasures.balancingMeasure.target}</Text>
+                      </div>
+                    )}
+
+                    {result.interventionsAndProgram.outcomeMeasures.patientExperience && (
+                      <div className="mb-4">
+                        <Text weight={500}>Patient Experience Measure:</Text>
+                        <Text size="sm">Measure: {result.interventionsAndProgram.outcomeMeasures.patientExperience.measure}</Text>
+                        <Text size="sm">Definition: {result.interventionsAndProgram.outcomeMeasures.patientExperience.definition}</Text>
+                        <Text size="sm">Collection Method: {result.interventionsAndProgram.outcomeMeasures.patientExperience.collection}</Text>
+                        <Text size="sm">Frequency: {result.interventionsAndProgram.outcomeMeasures.patientExperience.frequency}</Text>
+                        <Text size="sm">Target: {result.interventionsAndProgram.outcomeMeasures.patientExperience.target}</Text>
+                      </div>
+                    )}
                   </div>
                 </Stack>
               </Card>

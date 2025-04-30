@@ -5,6 +5,18 @@ import PastProblems from './PastProblems';
 import OpenAI from 'openai';
 
 interface GeneratedContent {
+  analysis: {
+    components: Array<{
+      component: string;
+      status: string;
+      importance: string;
+      suggestion?: string;
+      example?: string;
+      summary?: string;
+      details?: string;
+    }>;
+    suggestedImprovements: string;
+  };
   problemStatement: string;
   dataFramework: {
     dataPoints: string;
@@ -60,26 +72,49 @@ const ProblemConstructor = () => {
         dangerouslyAllowBrowser: true
       });
 
-      const systemPrompt = `You are a healthcare data analyst specializing in Singapore's healthcare system. Based on the user's prompt, generate:
+      const systemPrompt = `You are a healthcare data analyst specializing in Singapore's healthcare system. Analyze the user's input and provide:
 
-1. A detailed problem statement following this exact format:
+1. Analysis of Components:
+First, analyze the user's input and identify which key components are present and which are missing. The required components are:
+- Population/Process (specific patient group)
+- Location/Setting (specific hospital/ward)
+- Problem Description (specific clinical issue)
+- Evidence/Data (quantitative measures)
+- Consequences (measurable impacts)
+- Contributing Factors (actionable causes)
+
+For each component, provide:
+- Whether it is present or missing
+- Why it's important
+- If missing: Suggested information to include and example
+- If present: Summary of the provided information
+
+2. Suggested Problem Statement:
+Based on the analysis, generate a complete problem statement following this format:
 "The [specific patient population with relevant characteristics] at [specific hospital/location with ward/unit details] are experiencing [specific clinical problem or deviation from guidelines/standards] as evidenced by [specific quantitative data, audit results, or measurable observations that demonstrate the problem]. This is contributing to [specific clinical and operational consequences with measurable impacts] and is likely influenced by [specific systemic, process, or knowledge-based factors that contribute to the problem]."
 
-Requirements for the problem statement:
-1. Use exact square brackets [] around each key element
-2. Include specific quantitative data and measurements where available
-3. Reference specific guidelines, standards, or protocols when relevant
-4. Use precise clinical terminology
-5. Maintain a formal, academic tone
-6. Ensure each section flows logically into the next
-7. Include specific ward/unit details in the location
-8. Specify exact percentages, rates, or other measurable data in the evidence section
-9. List concrete, specific consequences with measurable impacts
-10. Identify specific, actionable contributing factors
-
-2. A comprehensive data framework specifically tailored to Singapore's healthcare context. Each component must contain complete, detailed answers. Here's an example of the expected format:
+3. A comprehensive data framework specifically tailored to Singapore's healthcare context. Each component must contain complete, detailed answers. Here's an example of the expected format:
 
 {
+  "analysis": {
+    "components": [
+      {
+        "component": "Location/Setting",
+        "status": "missing",
+        "importance": "Helps identify the specific context and scope of the problem",
+        "suggestion": "Include specific hospital name, ward number, and department",
+        "example": "Singapore General Hospital, Ward 5A, Orthopaedic Department"
+      },
+      {
+        "component": "Population/Process",
+        "status": "present",
+        "importance": "Defines the target group for analysis",
+        "summary": "Adult inpatients at high risk of pressure ulcers",
+        "details": "The input clearly specifies the target population as adult inpatients with Braden Scale score ≤18"
+      }
+    ],
+    "suggestedImprovements": "Consider adding specific location details and quantitative evidence to strengthen the problem statement."
+  },
   "problemStatement": "The [Adult inpatients at high risk of pressure ulcers] at [Singapore General Hospital, Ward 5A] are experiencing...",
   "dataFramework": {
     "dataPoints": "1. Patient demographics (age, gender, ethnicity)\n2. Clinical risk factors (mobility status, nutrition scores)\n3. Pressure ulcer incidence rates\n4. Nursing interventions documentation\n5. Patient outcomes and length of stay",
@@ -93,15 +128,7 @@ Requirements for the problem statement:
   }
 }
 
-For each component, provide:
-- Specific, actionable items
-- Clear, detailed descriptions
-- Singapore healthcare context
-- Practical implementation details
-- Measurable outcomes
-- Relevant timelines
-
-Format the response as a JSON object with two keys: "problemStatement" and "dataFramework". Each component in the dataFramework must contain complete, detailed answers with specific items and descriptions.`;
+Format the response as a JSON object with three keys: "analysis", "problemStatement", and "dataFramework". The analysis should identify missing components and provide suggestions for improvement.`;
 
       const completion = await openai.chat.completions.create({
         messages: [
@@ -176,7 +203,35 @@ Format the response as a JSON object with two keys: "problemStatement" and "data
           {result && (
             <>
               <Card shadow="sm" padding="lg" radius="md" withBorder className="mt-6">
-                <Title order={3} className="mb-4">Generated Problem Statement</Title>
+                <Title order={3} className="mb-4">Analysis of Components</Title>
+                <Stack spacing="md">
+                  {result.analysis.components.map((item, index) => (
+                    <div key={index}>
+                      <Text weight={500} color={item.status === "missing" ? "red" : "green"}>
+                        {item.component}: {item.status === "missing" ? "Missing" : "Present"}
+                      </Text>
+                      <Text size="sm" color="dimmed">Importance: {item.importance}</Text>
+                      {item.status === "missing" && (
+                        <>
+                          <Text size="sm">Suggestion: {item.suggestion}</Text>
+                          <Text size="sm">Example: {item.example}</Text>
+                        </>
+                      )}
+                      {item.status === "present" && (
+                        <Text size="sm">Summary: {item.summary}</Text>
+                      )}
+                      {item.status === "present" && (
+                        <Text size="sm">Details: {item.details}</Text>
+                      )}
+                    </div>
+                  ))}
+                  <Text weight={500} className="mt-4">Suggested Improvements:</Text>
+                  <Text>{result.analysis.suggestedImprovements}</Text>
+                </Stack>
+              </Card>
+
+              <Card shadow="sm" padding="lg" radius="md" withBorder className="mt-6">
+                <Title order={3} className="mb-4">Suggested Problem Statement</Title>
                 <Text style={{ whiteSpace: 'pre-line' }}>{highlightBracketedText(result.problemStatement)}</Text>
               </Card>
 

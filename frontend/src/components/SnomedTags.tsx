@@ -112,7 +112,7 @@ const SnomedTags = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-w-6xl p-6">
       <div className="mb-6">
         <Title order={1} className="text-2xl font-bold text-gray-800">
           SNOMED Tags

@@ -40,8 +40,8 @@ function App() {
           <div className="min-h-screen bg-gray-50">
             <Navbar />
             <Layout>
-              <main className="container mx-auto px-4 py-4 md:py-8">
-                <div className="max-w-7xl mx-auto">
+              <main className="container mx-auto px-4 py-4">
+                <div className="max-w-7xl">
                   <Routes>
                     <Route path="/" element={<QuestionList />} />
                     <Route path="/questions" element={<QuestionList />} />

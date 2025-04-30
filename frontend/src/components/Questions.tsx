@@ -3,7 +3,7 @@ import { mockQuestions } from '../mockData/departments';
 
 const Questions = () => {
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-w-6xl p-6">
       <Title order={1} className="text-2xl font-bold text-gray-800 mb-6">
         Clinical Questions
       </Title>

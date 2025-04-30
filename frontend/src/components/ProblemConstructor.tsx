@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { TextInput, Textarea, Button, Card, Title, Stack, Text, Select } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import PastProblems from './PastProblems';
+import OpenAI from 'openai';
 
 interface ProblemConstructorForm {
   population?: string;
@@ -37,21 +38,33 @@ const ProblemConstructor = () => {
     setResult('');
 
     try {
-      const response = await fetch('/api/v1/problem-constructor/generate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+      const openai = new OpenAI({
+        apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+        dangerouslyAllowBrowser: true
       });
 
-      const data = await response.json();
+      const prompt = `Create a detailed problem statement using the following information:
 
-      if (!response.ok) {
-        throw new Error(data.detail || 'Failed to generate problem statement');
-      }
+Population/Process: ${formData.population}
 
-      setResult(data.result);
+Location/Setting: ${formData.location}
+
+Problem Description: ${formData.problem}
+
+Evidence/Data: ${formData.evidence}
+
+Consequences: ${formData.consequences}
+
+Contributing Factors: ${formData.factors}
+
+Format the response as a structured problem statement that clearly identifies each component with line breaks between sections.`;
+
+      const completion = await openai.chat.completions.create({
+        messages: [{ role: "user", content: prompt }],
+        model: "gpt-3.5-turbo",
+      });
+
+      setResult(completion.choices[0].message.content || '');
     } catch (error) {
       console.error('Error:', error);
       notifications.show({
@@ -93,7 +106,7 @@ const ProblemConstructor = () => {
                 
                 <TextInput
                   label="Location/Setting"
-                  placeholder="e.g., City General Hospital"
+                  placeholder="e.g., National University Hospital"
                   value={formData.location}
                   onChange={handleInputChange('location')}
                 />

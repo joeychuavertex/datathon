@@ -98,7 +98,10 @@ const ProblemConstructor = () => {
 1. Analysis of Components:
 First, analyze the user's input and identify which key components are present and which are missing. The required components are:
 - Population/Process (specific patient group)
-- Location/Setting (specific hospital/ward)
+- Location/Setting (specific hospital AND ward - both must be present)
+  * Hospital name (e.g., Singapore General Hospital or SGH, National University Hospital or NUH)
+  * Department (e.g., Emergency Department, ICU)
+  * Both elements must be specified for the component to be considered "present"
 - Problem Description (specific clinical issue)
 - Evidence/Data (quantitative measures)
 - Consequences (measurable impacts)
@@ -110,85 +113,76 @@ For each component, provide:
 - If missing: Suggested information to include and example
 - If present: Summary of the provided information
 
+For Location/Setting specifically:
+- If only hospital is mentioned: Mark as "missing" and suggest adding ward information
+- If only ward is mentioned: Mark as "missing" and suggest adding hospital information
+- If both are present: Mark as "present" and summarize both elements
+- Example of complete Location/Setting: "Singapore General Hospital, Ward 5A" or "National University Hospital, Emergency Department"
+
+Example component analysis for Location/Setting:
+If input only mentions "Singapore General Hospital":
+{
+  "component": "Location/Setting",
+  "status": "missing",
+  "importance": "Specific ward information is crucial for targeted interventions and resource allocation",
+  "suggestion": "Please specify the ward, department, or unit where the problem occurs",
+  "example": "Singapore General Hospital, Ward 5A"
+}
+
+If input mentions both:
+{
+  "component": "Location/Setting",
+  "status": "present",
+  "importance": "Complete location information enables precise problem identification and solution implementation",
+  "summary": "Singapore General Hospital, Ward 5A",
+  "details": "The problem is specifically occurring in Ward 5A of Singapore General Hospital"
+}
+
 2. Suggested Problem Statement:
-Based on the analysis, generate a complete problem statement following this format:
+Based on the analysis of components, generate a complete problem statement in this format:
 "The [specific patient population with relevant characteristics] at [specific hospital/location with ward/unit details] are experiencing [specific clinical problem or deviation from guidelines/standards] as evidenced by [specific quantitative data, audit results, or measurable observations that demonstrate the problem]. This is contributing to [specific clinical and operational consequences with measurable impacts] and is likely influenced by [specific systemic, process, or knowledge-based factors that contribute to the problem]."
+
+For example, if the component analysis found:
+- Population: "Elderly patients (≥65 years) with multiple comorbidities"
+- Location: "Singapore General Hospital"
+- Problem: "High incidence of medication errors"
+- Evidence: "15% error rate in medication administration"
+- Consequences: "Increased length of stay by 2 days on average"
+- Contributing Factors: "Complex medication regimens and staff workload"
+
+The problem statement should be:
+"The elderly patients (≥65 years) with multiple comorbidities at comorbidities department, Singapore General Hospital are experiencing a high incidence of medication errors as evidenced by a 15% error rate in medication administration. This is contributing to an increased average length of stay by 2 days and is likely influenced by complex medication regimens and high staff workload."
+
+Even if there are missing components, the suggested problem statement should still be generated that best fits the initial input and suggested improvements.
 
 3. A comprehensive data framework specifically tailored to Singapore's healthcare context.
 
 4. Evidence and Research Analysis:
+Provide a comprehensive analysis of the evidence and research that is relevant to the problem statement. Ensure there's always output for this section even if there are missing components.
+
 Provide a comprehensive analysis of:
-
 a) Relevant Evidence:
-- List key studies, guidelines, and best practices, focusing on:
-  * Singapore Ministry of Health (MOH) guidelines and policies
-  * Local hospital protocols and standards
-  * International guidelines adapted for Singapore context
-  * Recent research from Singapore healthcare institutions
-  * Regional (ASEAN) healthcare practices
-- For each piece of evidence, include:
-  * Title and source (e.g., "MOH Clinical Practice Guidelines 2023", "Singapore Medical Journal 2022")
-  * Key findings with specific metrics or outcomes
-  * Direct relevance to the problem statement
-  * Applicability to Singapore healthcare setting
-
-Example evidence entry:
-{
-  "title": "MOH Clinical Practice Guidelines for Pressure Ulcer Prevention",
-  "source": "Ministry of Health Singapore, 2023",
-  "keyFindings": "Implementation of standardized risk assessment reduced pressure ulcer incidence by 45% in local hospitals",
-  "relevance": "Directly applicable to improving pressure ulcer prevention in Singapore healthcare settings"
-}
+- List key studies, guidelines, and best practices
+- Include local and international evidence
+- Focus on Singapore healthcare context where possible
+- Highlight key findings and their relevance
 
 b) Quality Improvement Projects:
-- Focus on projects from Singapore healthcare institutions:
-  * Public hospitals (e.g., SGH, NUH, TTSH)
-  * Community hospitals
-  * Polyclinics
-  * Private healthcare providers
-- Include details about:
-  * Project objectives and scope
-  * Specific interventions implemented
-  * Measurable outcomes and results
-  * Challenges faced and solutions
-  * Sustainability of improvements
-
-Example QI project entry:
-{
-  "projectName": "Reducing Medication Errors in Ward 5A",
-  "institution": "Singapore General Hospital",
-  "interventions": "Implemented barcode scanning system, staff training, and double-checking protocol",
-  "outcomes": "Reduced medication errors by 60% over 6 months",
-  "lessonsLearned": "Importance of staff engagement and continuous monitoring"
-}
+- List relevant QI projects from Singapore healthcare institutions
+- Include interventions tried and their outcomes
+- Highlight lessons learned and best practices
+- Focus on similar patient populations or settings
 
 c) Research Gaps:
-- Identify specific areas needing further research in Singapore context:
-  * Clinical outcomes and effectiveness
-  * Cost-effectiveness and resource utilization
-  * Patient experience and satisfaction
-  * Implementation challenges
-  * Cultural and social factors
-- For each gap, specify:
-  * Current state of knowledge
-  * Why this gap matters
-  * Potential impact of addressing it
-  * Suggested research approaches
-
-Example research gap entry:
-{
-  "area": "Impact of cultural factors on medication adherence",
-  "currentStatus": "Limited local studies on cultural influences in medication adherence",
-  "potentialImpact": "Could improve medication adherence rates by 20-30% in multi-ethnic population"
-}
+- Identify areas needing further research
+- Highlight opportunities for innovation
+- Suggest potential impact of addressing these gaps
 
 d) Summary:
-- Provide a concise overview that:
-  * Synthesizes key findings from evidence
-  * Highlights successful QI approaches
-  * Identifies priority research areas
-  * Suggests actionable next steps
-  * Emphasizes Singapore-specific considerations
+- Provide a concise overview of the current state of knowledge
+- Highlight key insights and implications
+- Suggest next steps for evidence-based improvement
+
 
 Format your response as a valid JSON object with the following structure:
 
@@ -355,7 +349,7 @@ Your response must be a valid JSON object with all the fields shown above. Do no
                 />
                 
                 <Button type="submit" loading={loading}>
-                  Generate Problem Statement & Data Framework
+                  Generate
                 </Button>
               </Stack>
             </form>
